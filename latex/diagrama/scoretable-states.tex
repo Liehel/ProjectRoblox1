@@ -1,0 +1,28 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=5pt]},
+  state/.style={rectangle, rounded corners=10pt, draw=blue!45!black, fill=blue!10,
+                text width=3cm, align=center, minimum height=1.2cm, font=\small},
+  ini/.style={circle, fill=black!75, minimum size=7pt, inner sep=0},
+  note/.style={rectangle, rounded corners=3pt, draw=orange!60!black, fill=orange!10, dashed,
+               text width=6.2cm, align=center, font=\scriptsize},
+  tr/.style={->, thick, draw=black!60},
+  trlbl/.style={font=\scriptsize, fill=white, inner sep=2pt, align=center},
+]
+
+\node[ini] (i) {};
+\node[state, right=1.0cm of i]  (s1) {The board appears in the world (still empty)};
+\node[state, right=2.8cm of s1] (s2) {It reads its \texttt{GameId} attribute};
+\node[state, right=2.8cm of s2] (s3) {It shows the top 10 for that game};
+
+\draw[tr] (i) -- (s1);
+\draw[tr] (s1) -- node[trlbl, above]{on load} (s2);
+\draw[tr] (s2) -- node[trlbl, above, text width=2.6cm]{\texttt{GameId} sets the title, icon, and colors} (s3);
+\draw[tr] (s3) to[out=55, in=125, looseness=5]
+  node[trlbl, above, text width=3.4cm]{a player finishes a game, the server sends the new top 10, and the board redraws} (s3);
+
+\node[note, below=1.3cm of s2] (n)
+  {\textbf{One board code, many games.} The \texttt{GameId} attribute decides which game it is: Oxybelis, Avis Toucan, Resilio, Foxy Fruit, Firmament Defender, Firmament Siege, or Juice Cutter for the shared board, or one of the three dedicated boards. The same code shows a different ranking, title, and color palette for each one.};
+\draw[dashed, draw=orange!60!black, ->] (n.north) -- (s2.south);
+
+\end{tikzpicture}

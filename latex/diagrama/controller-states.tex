@@ -1,0 +1,32 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=5pt]},
+  state/.style={rectangle, rounded corners=10pt, draw=blue!45!black, fill=blue!10,
+                text width=3.3cm, align=center, minimum height=1.3cm, font=\small},
+  ini/.style={circle, fill=black!75, minimum size=7pt, inner sep=0},
+  note/.style={rectangle, rounded corners=3pt, draw=orange!60!black, fill=orange!10, dashed,
+               text width=7.4cm, align=center, font=\scriptsize},
+  tr/.style={->, thick, draw=black!60},
+  trlbl/.style={font=\scriptsize, fill=white, inner sep=2pt, align=center},
+]
+
+\node[state] (pc)    at (0,0)      {\textbf{PC mode}\\keyboard and mouse\\(no touch buttons)};
+\node[state] (pad)   at (-4.4,-3.4){\textbf{Gamepad mode}\\Xbox or PlayStation\\menu auto-select on};
+\node[state] (touch) at (4.4,-3.4) {\textbf{Touch mode}\\on-screen buttons\\shown (mobile)};
+\node[ini]   (i)     at (0,2.0)    {};
+
+\draw[tr] (i) -- (pc);
+
+\draw[tr] (pc) to[bend right=14] node[trlbl, left, pos=0.55]{a gamepad is used} (pad);
+\draw[tr] (pad) to[bend right=14] node[trlbl, left, pos=0.5]{keyboard or mouse used} (pc);
+
+\draw[tr] (pc) to[bend left=14] node[trlbl, right, pos=0.55]{the screen is touched} (touch);
+\draw[tr] (touch) to[bend left=14] node[trlbl, right, pos=0.5]{keyboard or mouse used} (pc);
+
+\draw[tr] (pad) to[bend right=12] node[trlbl, above]{the screen is touched} (touch);
+\draw[tr] (touch) to[bend right=12] node[trlbl, below]{a gamepad is used} (pad);
+
+\node[note] (n) at (0,-6.4)
+  {Whatever the mode, every game binds one action set through \texttt{CrearControles...}, and \texttt{LimpiarControles} unbinds the previous game. The player never has to pick a version; the controller simply follows the last device that was used.};
+
+\end{tikzpicture}

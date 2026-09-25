@@ -1,0 +1,61 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=6pt]},
+  item/.style={rectangle, rounded corners=3pt, draw=black!45, fill=white,
+               align=center, font=\scriptsize, minimum height=0.85cm, text width=2.9cm, inner sep=2pt},
+  store/.style={cylinder, shape border rotate=90, aspect=0.18, draw=violet!50!black,
+                fill=violet!12, align=center, font=\scriptsize, text width=3.0cm, minimum height=1.2cm},
+  entity/.style={rectangle, draw=black!65, fill=black!10, align=center,
+                 font=\small\bfseries, minimum height=0.9cm, text width=3cm},
+  lbl/.style={font=\footnotesize\bfseries},
+  flow/.style={->, very thick, draw=black!55},
+  net/.style={<->, very thick, draw=teal!55!black},
+]
+
+% --- nodes per layer ---
+\node[entity] (player) at (8,0.7) {PLAYER};
+
+\node[item] (w1) at (2.7,-2.0)  {10 Arcade Machines (button per game)};
+\node[item] (w2) at (8.0,-2.0)  {Leaderboard Boards (in the world)};
+\node[item] (w3) at (13.3,-2.0) {Bank Analytics Building ($\sim$15 boards)};
+
+\node[item] (c1) at (2.2,-4.7)  {Game Clients $\times 10$ (UI, render, controls)};
+\node[item] (c2) at (6.1,-4.7)  {Menu System (Menu1to7 / 8to10)};
+\node[item] (c3) at (10.0,-4.7) {Universal Controller (input mapping)};
+\node[item] (c4) at (13.9,-4.7) {Leaderboard \& Dashboard clients};
+
+\node[item] (s1) at (2.7,-7.4)  {Game Servers $\times 10$ (anti-cheat, scoring)};
+\node[item] (s2) at (8.0,-7.4)  {Match Managers $\times 3$ (multiplayer rooms)};
+\node[item] (s3) at (13.3,-7.4) {Arcade, Leaderboard \& Analytics servers};
+
+\node[item] (m1) at (2.2,-10.1) {Game Modules $\times 10$ (logic, physics)};
+\node[item] (m2) at (6.1,-10.1) {Universal Leaderboard Module};
+\node[item] (m3) at (10.0,-10.1){Analytics Module + ChartEngine};
+\node[item] (m4) at (13.9,-10.1){Menu Modules (shared)};
+
+\node[store] (d1) at (3.2,-12.8) {Leaderboard scores};
+\node[store] (d2) at (8.0,-12.8) {Analytics: aggregates + player log};
+\node[store] (d3) at (12.8,-12.8){User settings (audio, purchases)};
+
+% --- layer containers (drawn behind) ---
+\begin{scope}[on background layer]
+  \node[rounded corners=6pt, fill=green!7,  draw=green!45!black, inner sep=9pt,
+        fit=(w1)(w2)(w3), label={[lbl, green!45!black]north west:GAME WORLD (Workspace)}] (worldbox) {};
+  \node[rounded corners=6pt, fill=blue!6,   draw=blue!45!black, inner sep=9pt,
+        fit=(c1)(c2)(c3)(c4), label={[lbl, blue!45!black]north west:CLIENT (StarterPlayer)}] (clientbox) {};
+  \node[rounded corners=6pt, fill=orange!7, draw=orange!60!black, inner sep=9pt,
+        fit=(s1)(s2)(s3), label={[lbl, orange!60!black]north west:SERVER (ServerScriptService)}] (serverbox) {};
+  \node[rounded corners=6pt, fill=teal!7,   draw=teal!55!black, inner sep=9pt,
+        fit=(m1)(m2)(m3)(m4), label={[lbl, teal!55!black]north west:SHARED MODULES (ReplicatedStorage)}] (modbox) {};
+  \node[rounded corners=6pt, fill=violet!7, draw=violet!50!black, inner sep=9pt,
+        fit=(d1)(d2)(d3), label={[lbl, violet!50!black]north west:DATA (Roblox DataStore)}] (databox) {};
+\end{scope}
+
+% --- flows between layers ---
+\draw[net] (player) -- node[font=\scriptsize, fill=white, inner sep=2pt]{walks up, taps, swipes / sees the world} (worldbox.north);
+\draw[net] (worldbox.south) -- node[font=\scriptsize, fill=white, inner sep=2pt]{shows the screen / reads input} (clientbox.north);
+\draw[net] (clientbox.south) -- node[font=\scriptsize, fill=white, inner sep=2pt, text=teal!45!black]{\textbf{RemoteEvents / RemoteFunctions}} (serverbox.north);
+\draw[flow] (serverbox.south) -- node[font=\scriptsize, fill=white, inner sep=2pt]{require and call the game logic} (modbox.north);
+\draw[net] (modbox.south) -- node[font=\scriptsize, fill=white, inner sep=2pt]{read and write (scores, stats, settings)} (databox.north);
+
+\end{tikzpicture}

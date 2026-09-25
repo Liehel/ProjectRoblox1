@@ -1,0 +1,50 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=5pt]},
+  start/.style={rectangle, rounded corners=12pt, draw=green!45!black, fill=green!20,
+                minimum width=3cm, minimum height=0.8cm, align=center, font=\small\bfseries},
+  menu/.style={rectangle, rounded corners=12pt, draw=blue!45!black, fill=blue!14,
+               minimum width=3cm, minimum height=0.8cm, align=center, font=\small\bfseries},
+  over/.style={rectangle, rounded corners=12pt, draw=red!50!black, fill=red!16,
+               minimum width=2.8cm, minimum height=0.8cm, align=center, font=\small\bfseries},
+  win/.style={rectangle, rounded corners=12pt, draw=orange!65!black, fill=yellow!40,
+              minimum width=2.8cm, minimum height=0.8cm, align=center, font=\small\bfseries},
+  act/.style={rectangle, draw=black!55, fill=teal!12, rounded corners=2pt,
+              text width=4.3cm, minimum height=0.8cm, align=center},
+  dec/.style={diamond, draw=black!55, fill=orange!16, aspect=2.3,
+              align=center, inner sep=1pt, text width=2.3cm, font=\scriptsize},
+  link/.style={->, thick, draw=black!60},
+  yeslbl/.style={font=\scriptsize\bfseries, color=green!45!black, fill=white, inner sep=1.5pt},
+  nolbl/.style={font=\scriptsize\bfseries, color=red!55!black, fill=white, inner sep=1.5pt},
+]
+
+\node[start] (s) {Press Play};
+\node[act, below=0.5cm of s]      (init)   {The paddle, the ball, and the bricks appear};
+\node[act, below=0.5cm of init]   (launch) {The player launches the ball};
+\node[act, below=0.5cm of launch] (play)   {The ball bounces around and breaks any brick it touches, adding to the score};
+\node[dec, below=0.65cm of play]  (lost)   {Did the ball fall with no lives left?};
+\node[dec, below=0.7cm of lost]   (clear)  {Are all the bricks gone?};
+\node[win, below=0.7cm of clear]  (cleared){Level cleared!};
+\node[dec, below=0.65cm of cleared](last)  {Was that the last level?};
+\node[win, below=0.7cm of last]   (finish) {You finished the game!};
+\node[act, below=0.7cm of finish] (score)  {Show the final score};
+\node[menu, below=0.55cm of score](back)   {Back to the menu};
+
+\node[over, right=2.7cm of lost]  (go)     {Game Over};
+
+\draw[link] (s) -- (init);
+\draw[link] (init) -- (launch);
+\draw[link] (launch) -- (play);
+\draw[link] (play) -- (lost);
+\draw[link] (lost) -- node[nolbl, right]{No} (clear);
+\draw[link] (lost.east) -- node[nolbl, above]{Yes} (go.west);
+\draw[link] (clear) -- node[yeslbl, right]{Yes} (cleared);
+\draw[link] (cleared) -- (last);
+\draw[link] (last) -- node[yeslbl, right]{Yes} (finish);
+\draw[link] (finish) -- (score);
+\draw[link] (score) -- (back);
+\draw[link] (go) |- (score.east);
+\draw[link] (clear.west) -- ++(-0.9,0) node[nolbl, above]{No} |- (play.west);
+\draw[link] (last.west) -- ++(-1.6,0) node[nolbl, above]{No} |- (play.west);
+
+\end{tikzpicture}

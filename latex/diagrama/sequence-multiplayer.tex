@@ -1,0 +1,60 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=6pt]},
+  party/.style={rectangle, rounded corners=4pt, draw=blue!45!black, fill=blue!12,
+                align=center, font=\small\bfseries, minimum height=0.9cm, text width=2.7cm},
+  life/.style={draw=black!45, dashed},
+  msg/.style={->, thick, draw=black!65},
+  ret/.style={->, thick, draw=black!55, dashed},
+  ext/.style={->, thick, draw=orange!60!black, dotted},
+  ml/.style={font=\scriptsize, fill=white, inner sep=1.5pt, align=center},
+  dot/.style={circle, fill=black!65, minimum size=4pt, inner sep=0},
+]
+
+\def\hx{0}   \def\gx{5.3}  \def\sx{10.6}
+\def\bot{-11.9}
+
+% participants
+\node[party] (host)   at (\hx,0) {Host (player)};
+\node[party] (guest)  at (\gx,0) {Guest (player)};
+\node[party] (server) at (\sx,0) {Server (Match Manager)};
+
+% lifelines
+\draw[life] (host.south)   -- (\hx,\bot);
+\draw[life] (guest.south)  -- (\gx,\bot);
+\draw[life] (server.south) -- (\sx,\bot);
+
+% messages
+\draw[msg] (\hx,-1.4) -- node[ml, above]{CreateRoom()} (\sx,-1.4);
+\draw[ret] (\sx,-2.15) -- node[ml, above]{returns the PIN (e.g.\ 4271)} (\hx,-2.15);
+\draw[ext] (\hx,-2.95) -- node[ml, above]{shares the PIN outside the game} (\gx,-2.95);
+\draw[msg] (\gx,-3.7) -- node[ml, above]{JoinRoom(4271)} (\sx,-3.7);
+\draw[ret] (\sx,-4.45) -- node[ml, above]{joined the room} (\gx,-4.45);
+
+% broadcast: room update
+\draw[msg] (\sx,-5.2) -- node[ml, above]{RoomUpdate: player list $\rightarrow$ both} (\hx,-5.2);
+\node[dot] at (\gx,-5.2) {};
+
+\draw[msg] (\hx,-6.05) -- node[ml, above]{StartMultiplayerMatch()} (\sx,-6.05);
+
+% broadcast: match begins
+\draw[msg] (\sx,-6.8) -- node[ml, above]{the match begins $\rightarrow$ both} (\hx,-6.8);
+\node[dot] at (\gx,-6.8) {};
+
+% loop frame
+\draw[draw=teal!55!black, thick, rounded corners=2pt] (\hx-0.9,-7.35) rectangle (\sx+1.4,-10.7);
+\node[fill=teal!55!black, text=white, font=\scriptsize\bfseries, anchor=north west]
+  at (\hx-0.9,-7.35) {loop};
+\node[font=\scriptsize, anchor=north west, text=teal!45!black] at (\hx-0.2,-7.4) {[while the match runs]};
+
+\draw[msg] (\hx,-8.15) -- node[ml, above]{score update (every player)} (\sx,-8.15);
+\draw[msg] (\sx,-8.9) -- node[ml, above]{UpdateLiveScore: live board $\rightarrow$ both} (\hx,-8.9);
+\node[dot] at (\gx,-8.9) {};
+\draw[msg] (\gx,-9.65) -- node[ml, above]{PlayerDied} (\sx,-9.65);
+\draw[ret] (\sx,-10.4) -- node[ml, above]{switch to spectator mode} (\gx,-10.4);
+
+% broadcast: winner
+\draw[msg] (\sx,-11.3) -- node[ml, above]{the winner is announced $\rightarrow$ both} (\hx,-11.3);
+\node[dot] at (\gx,-11.3) {};
+
+\end{tikzpicture}

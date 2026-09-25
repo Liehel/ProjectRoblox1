@@ -1,0 +1,21 @@
+# Project place file
+/Roblox.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+sourcemap.json
+
+# Carpetas de trabajo de sesiones de depuracion (no son fuente del proyecto).
+# _versions se extrae del propio historial de git: commitearla seria duplicar
+# 25 MB que ya estan dentro del repo.
+/_versions/
+/_session_backup/
+
+# Artefactos de compilacion de LaTeX. main.log guarda rutas absolutas de la
+# maquina que compilo; los demas son ruido. El PDF si se conserva.
+/latex/*.aux
+/latex/*.log
+/latex/*.out
+/latex/*.toc

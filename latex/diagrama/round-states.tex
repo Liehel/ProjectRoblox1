@@ -1,0 +1,38 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=5pt]},
+  state/.style={rectangle, rounded corners=10pt, draw=blue!45!black, fill=blue!10,
+                text width=2.4cm, align=center, minimum height=1.0cm, font=\small},
+  over/.style={rectangle, rounded corners=10pt, draw=red!50!black, fill=red!16,
+               text width=2.4cm, align=center, minimum height=1.0cm, font=\small\bfseries},
+  ini/.style={circle, fill=black!75, minimum size=7pt, inner sep=0},
+  note/.style={rectangle, rounded corners=3pt, draw=orange!60!black, fill=orange!10, dashed,
+               text width=8.2cm, align=center, font=\scriptsize},
+  tr/.style={->, thick, draw=black!60},
+  trlbl/.style={font=\scriptsize, fill=white, inner sep=1.5pt, align=center},
+]
+
+\node[ini]   (i)     at (-2.1,2.6) {};
+\node[state] (ready) at (0,2.6)    {Ready (``READY!'')};
+\node[state] (count) at (4.0,2.6)  {Countdown (3, 2, 1)};
+\node[state] (play)  at (4.0,0)    {Playing};
+\node[state] (level) at (8.4,2.6)  {Level Complete};
+\node[state] (dying) at (4.0,-2.8) {Dying};
+\node[over]  (over)  at (8.4,-2.8) {Game Over (show score)};
+
+\draw[tr] (i) -- (ready);
+\draw[tr] (ready) -- node[trlbl, above]{the overlay shows} (count);
+\draw[tr] (count) -- node[trlbl, right]{after 3, 2, 1} (play);
+\draw[tr] (play) -- node[trlbl, pos=0.4, right]{level goal reached} (level);
+\draw[tr] (level.north) to[out=90, in=90, looseness=0.8]
+  node[trlbl, above]{the next level loads} (ready.north);
+\draw[tr] (play) -- node[trlbl, right]{caught or hit} (dying);
+\draw[tr] (dying.west) to[out=180, in=250, looseness=1.1]
+  node[trlbl, left, pos=0.6]{lose a life and respawn} (ready.south);
+\draw[tr] (dying) -- node[trlbl, above]{no lives left} (over);
+\draw[tr] (play) -- node[trlbl, pos=0.55, above, sloped]{all levels cleared (win)} (over);
+
+\node[note] (n) at (4.0,-5.2)
+  {These are the real internal states used by the code (for example in Foxy Fruit). The simpler games use only a part of them: a game with no levels has no \emph{Level Complete}, and a game with a single life goes straight from \emph{Playing} to \emph{Game Over} with no respawn.};
+
+\end{tikzpicture}

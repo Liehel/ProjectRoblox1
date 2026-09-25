@@ -1,0 +1,41 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=5pt]},
+  state/.style={rectangle, rounded corners=10pt, draw=blue!45!black, fill=blue!10,
+                text width=2.5cm, align=center, minimum height=1.0cm, font=\small},
+  game/.style={rectangle, rounded corners=10pt, draw=green!45!black, fill=green!14,
+               text width=2.3cm, align=center, minimum height=1.0cm, font=\small},
+  closed/.style={rectangle, rounded corners=10pt, draw=black!55, fill=black!7,
+                 text width=2.3cm, align=center, minimum height=1.0cm, font=\small},
+  ini/.style={circle, fill=black!75, minimum size=7pt, inner sep=0},
+  tr/.style={->, thick, draw=black!60},
+  trlbl/.style={font=\scriptsize, fill=white, inner sep=2pt, align=center},
+]
+
+\node[ini]    (i)      at (-2.1,0)  {};
+\node[closed] (world)  at (0,0)     {In the world (no menu)};
+\node[state]  (main)   at (4.3,0)   {Main Menu (PLAY, VIP, EXIT)};
+\node[state]  (vip)    at (4.3,2.6) {VIP / Donation Menu};
+\node[game]   (ingame) at (9.0,0)   {In Game};
+\node[state]  (over)   at (9.0,-2.8){Game Over screen};
+\node[state]  (lobby)  at (4.3,-2.8){Lobby (PIN rooms, versus)};
+
+\draw[tr] (i) -- (world);
+\draw[tr] (world.north east) to[out=30,in=150] node[trlbl, above]{activate the button} (main.north west);
+\draw[tr] (main.south west) to[out=210,in=330] node[trlbl, below]{EXIT} (world.south east);
+
+\draw[tr] (main) -- node[trlbl, right]{VIP} (vip);
+\draw[tr] (vip.west) to[out=180,in=120] node[trlbl, left]{back} (main.north west);
+\draw[tr] (vip) to[out=60,in=120,looseness=6] node[trlbl, above]{donate} (vip);
+
+\draw[tr] (main) -- node[trlbl, above]{PLAY} (ingame);
+\draw[tr] (ingame) -- node[trlbl, right]{game over} (over);
+\draw[tr] (over) to[out=160,in=290] node[trlbl, pos=0.35, right]{MENU} (main.south east);
+
+\draw[tr] (over.south west) to[out=210,in=320] node[trlbl, pos=0.2, below]{EXIT} (world.south);
+
+\draw[tr] (main) -- node[trlbl, left]{create / join room} (lobby);
+\draw[tr] (lobby) to[out=20,in=250] node[trlbl, pos=0.6, left]{start match} (ingame.south west);
+\draw[tr] (lobby.west) to[out=160,in=200,looseness=1.6] node[trlbl, left]{leave} (main.west);
+
+\end{tikzpicture}

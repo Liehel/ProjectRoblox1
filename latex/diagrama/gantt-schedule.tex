@@ -1,0 +1,48 @@
+\begin{ganttchart}[
+  hgrid, vgrid,
+  x unit=0.5cm,
+  y unit title=0.62cm,
+  y unit chart=0.52cm,
+  title height=1,
+  title/.style={fill=black!8, draw=black!30},
+  title label font=\scriptsize\bfseries,
+  bar height=0.6,
+  bar/.style={fill=teal!45, draw=teal!60!black},
+  bar label font=\scriptsize,
+  group/.style={fill=blue!45, draw=blue!60!black},
+  group label font=\scriptsize\bfseries,
+  group height=0.5,
+  milestone/.style={fill=orange!70, draw=orange!80!black},
+  milestone label font=\scriptsize\bfseries,
+]{1}{23}
+
+\gantttitle{Feb 2026}{4}
+\gantttitle{Mar 2026}{4}
+\gantttitle{Apr 2026}{5}
+\gantttitle{May 2026}{4}
+\gantttitle{Jun 2026}{4}
+\gantttitle{Jul}{2} \\
+
+\ganttgroup{2D classic games}{1}{7} \\
+\ganttbar{Oxybelis}{1}{1} \\
+\ganttbar{Avis Toucan}{2}{2} \\
+\ganttbar{Resilio}{3}{3} \\
+\ganttbar{Foxy Fruit}{4}{4} \\
+\ganttbar{Firmament Defender}{5}{5} \\
+\ganttbar{Firmament Siege}{6}{6} \\
+\ganttbar{Juice Cutter}{7}{7} \\
+
+\ganttgroup{3D multiplayer games}{8}{10} \\
+\ganttbar{Turris Casei}{8}{8} \\
+\ganttbar{Tap And Hold}{9}{9} \\
+\ganttbar{ImNotASphere}{10}{10} \\
+
+\ganttgroup{Polish, art and release}{11}{23} \\
+\ganttbar{Code refactoring}{11}{11} \\
+\ganttbar{Documentation}{12}{12} \\
+\ganttbar{Island and art design}{13}{15} \\
+\ganttbar{Testing and bug fixing}{16}{21} \\
+\ganttbar{Marketing and trailer}{22}{22} \\
+\ganttmilestone{Release}{23}
+
+\end{ganttchart}

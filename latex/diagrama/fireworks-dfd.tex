@@ -1,0 +1,43 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=5pt]},
+  entity/.style={rectangle, draw=black!65, fill=black!8, text width=2.1cm, align=center,
+                 minimum height=1.0cm, font=\small\bfseries},
+  proc/.style={rectangle, rounded corners=8pt, draw=teal!55!black, fill=teal!12,
+               text width=3.2cm, align=center, minimum height=1.1cm, font=\small},
+  econ/.style={rectangle, rounded corners=8pt, draw=orange!60!black, fill=orange!12,
+               text width=2.6cm, align=center, minimum height=1.1cm, font=\scriptsize},
+  guard/.style={rectangle, draw=red!55!black, fill=red!10, text width=2.4cm,
+                align=center, minimum height=1.0cm, font=\scriptsize},
+  render/.style={rectangle, rounded corners=8pt, draw=blue!45!black, fill=blue!12,
+                 text width=3.2cm, align=center, minimum height=1.0cm, font=\small},
+  sky/.style={rectangle, rounded corners=8pt, draw=violet!50!black, fill=violet!12,
+              text width=3.0cm, align=center, minimum height=1.0cm, font=\small},
+  flow/.style={->, thick, draw=black!60},
+  side/.style={->, thick, draw=black!45, dashed},
+  fl/.style={font=\scriptsize, fill=white, inner sep=2pt, align=center},
+]
+
+\node[entity] (player) {Launcher};
+\node[proc,   below=1.4cm of player] (menu)  {1. FireworksClient menu (19 options, greyed by availability)};
+\node[guard,  below=1.5cm of menu]   (rg)    {2. RemoteGuard (12/s, type and range)};
+\node[econ,   right=3.0cm of rg]     (inv)   {FireworksInventory (server authority: quota, raffle, VIP)};
+\node[proc,   below=1.5cm of rg]     (srv)   {3. FireworksServer (validates, then broadcasts)};
+\node[render, below=1.6cm of srv]    (rend)  {4. FireworksRenderer (pooled, tier scaled)};
+\node[sky,    below=1.4cm of rend]   (sky)   {The sky (particles, shockwave, lighting)};
+
+\node[entity, right=3.4cm of rend]   (others) {Every other client};
+\node[guard,  above=1.3cm of others] (toggle) {Visibility toggle (FireworksGlobalOn)};
+
+\draw[flow] (player) -- node[fl, right]{picks a firework} (menu);
+\draw[flow] (menu)   -- node[fl, right]{\texttt{RequestLaunch} (id)} (rg);
+\draw[flow] (rg)     -- node[fl, right]{accepted id} (srv);
+\draw[side] (rg)     -- node[fl, above]{\texttt{canLaunch} / \texttt{commit}} (inv);
+\draw[side] (inv)    -- node[fl, right]{\texttt{Availability}} (menu);
+\draw[flow] (srv)    -- node[fl, right]{\texttt{PlayFirework} (id, origin, launcher)} (rend);
+\draw[flow] (rend)   -- node[fl, right]{one of eight kinds} (sky);
+
+\draw[flow] (srv.east) -- ++(2.0,0) |- node[fl, above]{same broadcast} (others.north east);
+\draw[side] (toggle)   -- node[fl, right]{off: the launch is skipped} (others);
+
+\end{tikzpicture}

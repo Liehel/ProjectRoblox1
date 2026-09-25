@@ -1,0 +1,52 @@
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=6pt]},
+  party/.style={rectangle, rounded corners=4pt, draw=blue!45!black, fill=blue!12,
+                align=center, font=\scriptsize\bfseries, minimum height=0.9cm, text width=2.4cm},
+  life/.style={draw=black!45, dashed},
+  msg/.style={->, thick, draw=black!65},
+  ret/.style={->, thick, draw=black!55, dashed},
+  ml/.style={font=\scriptsize, fill=white, inner sep=1.5pt, align=center},
+]
+
+\def\px{0}  \def\cx{3.0}  \def\sx{6.3}  \def\mx{9.6}  \def\lx{13.0}  \def\dx{16.4}
+\def\bot{-13.3}
+
+% participants
+\node[party] (p) at (\px,0) {Player};
+\node[party] (c) at (\cx,0) {Client (game UI)};
+\node[party] (s) at (\sx,0) {Server (game script)};
+\node[party] (m) at (\mx,0) {Module (game logic)};
+\node[party] (l) at (\lx,0) {Leaderboard module};
+\node[party] (d) at (\dx,0) {DataStore};
+
+% lifelines
+\foreach \x in {\px,\cx,\sx,\mx,\lx,\dx} { \draw[life] (\x,-0.5) -- (\x,\bot); }
+
+% --- start ---
+\draw[msg] (\px,-1.3) -- node[ml, above]{presses Play} (\cx,-1.3);
+\draw[msg] (\cx,-2.0) -- node[ml, above]{StartRequest (RemoteEvent)} (\sx,-2.0);
+\draw[msg] (\sx,-2.7) -- node[ml, above]{create a new game} (\mx,-2.7);
+\draw[msg] (\sx,-3.4) -- node[ml, above]{GameState ``Start''} (\cx,-3.4);
+
+% --- game loop frame ---
+\draw[draw=teal!55!black, thick, rounded corners=2pt] (\px-0.8,-3.95) rectangle (\mx+1.0,-7.75);
+\node[fill=teal!55!black, text=white, font=\scriptsize\bfseries, anchor=north west] at (\px-0.8,-3.95) {loop};
+\node[font=\scriptsize, anchor=north west, text=teal!45!black] at (\px-0.1,-4.0) {[each tick of the game]};
+
+\draw[msg] (\sx,-4.6) -- node[ml, above]{step(): advance one tick} (\mx,-4.6);
+\draw[msg] (\sx,-5.3) -- node[ml, above]{GameState ``Update'' (state + score)} (\cx,-5.3);
+\draw[msg] (\cx,-6.0) -- node[ml, above]{draws the frame} (\px,-6.0);
+\draw[msg] (\px,-6.7) -- node[ml, above]{presses a direction} (\cx,-6.7);
+\draw[msg] (\cx,-7.4) -- node[ml, above]{SubmitMove (RemoteEvent)} (\sx,-7.4);
+
+% --- game over ---
+\draw[ret] (\mx,-8.4) -- node[ml, above]{the player died} (\sx,-8.4);
+\draw[msg] (\sx,-9.1) -- node[ml, above]{ReportScore (score, time)} (\lx,-9.1);
+\draw[msg] (\lx,-9.8) -- node[ml, above]{UpdateAsync: save the top 10} (\dx,-9.8);
+\draw[ret] (\dx,-10.5) -- node[ml, above]{the updated top 10} (\lx,-10.5);
+\draw[ret] (\lx,-11.2) -- node[ml, above]{the new top 10} (\sx,-11.2);
+\draw[msg] (\sx,-11.9) -- node[ml, above]{GameState ``End'' (final score)} (\cx,-11.9);
+\draw[msg] (\cx,-12.6) -- node[ml, above]{shows Game Over and the score} (\px,-12.6);
+
+\end{tikzpicture}

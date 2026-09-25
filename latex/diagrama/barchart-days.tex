@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+\begin{axis}[
+  ybar stacked,
+  bar width=14pt,
+  width=15cm, height=7.5cm,
+  symbolic x coords={Oxybelis,Avis Toucan,Resilio,Foxy Fruit,Firm. Defender,Firm. Siege,Juice Cutter,Turris Casei,Tap And Hold,ImNotASphere},
+  xtick=data,
+  x tick label style={rotate=38, anchor=east, font=\scriptsize},
+  ylabel={Days of work},
+  ymin=0, ymax=9,
+  ytick={0,2,4,6,8},
+  enlarge x limits=0.06,
+  legend style={at={(0.5,1.04)}, anchor=south, legend columns=-1, font=\footnotesize, draw=black!30},
+  tick label style={font=\scriptsize},
+  ylabel style={font=\small},
+  nodes near coords align={vertical},
+]
+\addplot+[ybar, fill=teal!55, draw=teal!65!black] coordinates {
+  (Oxybelis,2) (Avis Toucan,2) (Resilio,3) (Foxy Fruit,3) (Firm. Defender,3)
+  (Firm. Siege,3) (Juice Cutter,3) (Turris Casei,4) (Tap And Hold,4) (ImNotASphere,4) };
+\addplot+[ybar, fill=orange!55, draw=orange!70!black] coordinates {
+  (Oxybelis,3) (Avis Toucan,2) (Resilio,3) (Foxy Fruit,3) (Firm. Defender,3)
+  (Firm. Siege,3) (Juice Cutter,3) (Turris Casei,4) (Tap And Hold,4) (ImNotASphere,4) };
+\legend{Logic, Polishing and debugging}
+\end{axis}
+\end{tikzpicture}
